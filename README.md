@@ -30,3 +30,7 @@ Restart VS Code and test in the terminal:
 
 
 Both should print version numbers.
+
+
+I'm trying to get as much work done as possible so please you guys do whatever you can too and don't forget to branch before pushing
+
