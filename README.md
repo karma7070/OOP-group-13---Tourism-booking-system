@@ -1,4 +1,4 @@
-I created a base file, all you guys have to do is install jdk26 from adoptium and maven from maven.apache.org (Highlight the links below and click the "Go to..." option) 
+I created a base file, all you guys have to do is install jdk26 from adoptium and maven from maven.apache.org, the links are below this text
 
 1 - Adoptium: https://adoptium.net 
 
