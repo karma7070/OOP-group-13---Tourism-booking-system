@@ -1,6 +1,9 @@
-package com.example.demo;
+package com.example.TouristSystem.Controllers;
+
 
 import org.springframework.http.ResponseEntity;
+import com.example.TouristSystem.Services.TouristSiteService;
+import com.example.TouristSystem.Models.Touristsite;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

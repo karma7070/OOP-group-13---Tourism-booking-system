@@ -1,6 +1,8 @@
-package com.example.demo;
+package com.example.TouristSystem.Services;
 
 import org.springframework.stereotype.Service;
+import com.example.TouristSystem.Repository.TouristSiteRepository;
+import com.example.TouristSystem.Models.Touristsite;
 import java.util.List;
 
 @Service
