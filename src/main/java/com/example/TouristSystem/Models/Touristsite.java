@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.TouristSystem.Models;
 
 import jakarta.persistence.*;
 
