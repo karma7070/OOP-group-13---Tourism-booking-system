@@ -2,31 +2,31 @@ package com.example.TouristSystem.Controllers;
 
 
 import org.springframework.http.ResponseEntity;
-import com.example.TouristSystem.Services.TouristSiteService;
-import com.example.TouristSystem.Models.Touristsite;
+import com.example.TouristSystem.Services.TourpackageService;
+import com.example.TouristSystem.Models.Tourpackage;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/sites")
-public class TouristSiteController {
+public class TourpackageController {
 
-    private final TouristSiteService service;
+    private final TourpackageService service;
 
-    public TouristSiteController(TouristSiteService service) {
+    public TourpackageController(TourpackageService service) {
         this.service = service;
     }
 
     // GET http://localhost:8080/sites
     @GetMapping
-    public List<Touristsite> getAllSites() {
+    public List<Tourpackage> getAllSites() {
         return service.getAllSites();
     }
 
     // GET http://localhost:8080/sites/1
     @GetMapping("/{id}")
-    public ResponseEntity<Touristsite> getSiteById(@PathVariable Long id) {
-        Touristsite site = service.getSiteById(id);
+    public ResponseEntity<Tourpackage> getSiteById(@PathVariable Long id) {
+        Tourpackage site = service.getSiteById(id);
         if (site == null) {
             return ResponseEntity.notFound().build();
         }
@@ -35,7 +35,7 @@ public class TouristSiteController {
 
     // POST http://localhost:8080/sites
     @PostMapping
-    public Touristsite createSite(@RequestBody Touristsite site) {
+    public Tourpackage createSite(@RequestBody Tourpackage site) {
         return service.createSite(site);
     }
 

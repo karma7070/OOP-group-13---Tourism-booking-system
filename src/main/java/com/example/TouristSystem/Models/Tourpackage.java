@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tourist_sites")
-public class Touristsite {
+public class Tourpackage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +14,8 @@ public class Touristsite {
     private String location;
     private String description;
     private Double pricePerPerson;
+    private String activities;
+    private int open_slots;
 
     public Long getId() { return id; }
 
@@ -34,4 +36,12 @@ public class Touristsite {
     public Double getPricePerPerson() { return pricePerPerson; }
     
     public void setPricePerPerson(Double pricePerPerson) { this.pricePerPerson = pricePerPerson; }
+
+    public String getActivities() { return activities; }
+
+    public void setActivities(String activities) { this.activities = activities; }
+
+    public int getOpen_slots() { return open_slots; }
+
+    public void setOpen_slots(int open_slots) { this.open_slots = open_slots; }
 }
