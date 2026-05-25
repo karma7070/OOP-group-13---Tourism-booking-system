@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.TouristSystem.Models;
 
 import jakarta.persistence.*;
 
@@ -16,6 +16,10 @@ public class User {
 
     public Long getId(){
         return id;
+    }
+
+    public void setId(Long id) {
+    this.id = id;
     }
 
     public void setName(String name){
