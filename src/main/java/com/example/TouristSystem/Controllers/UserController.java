@@ -1,46 +1,46 @@
 package com.example.TouristSystem.Controllers;
 
 import org.springframework.http.ResponseEntity;
-import com.example.TouristSystem.Models.User;
-import com.example.TouristSystem.Services.UserService;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import com.example.TouristSystem.Services.UserService;
+import com.example.TouristSystem.Models.User;
 
 @RestController
 @RequestMapping("/users")
-
 public class UserController {
-    
+
     private final UserService service;
 
-    public UserController(UserService service){
+    public UserController(UserService service) {
         this.service = service;
-
     }
 
-    @GetMapping
-    public List<User> getAllUsers(){
-        return service.getAllUsers();
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        User created = service.registerUser(user);
+        return ResponseEntity.ok(created);
     }
 
-    @GetMapping("/{id}") 
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = service.getUserById(id);
-        if(user == null){
-            return ResponseEntity.notFound().build();
-        }
+        if (user == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user){
-       return service.createUser(user);
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<User> updateProfile(@PathVariable Long id,
+                                               @RequestBody User updatedDetails) {
+        User updated = service.updateProfile(id, updatedDetails);
+        if (updated == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-      service.deleteUser(id);
-      return ResponseEntity.ok().build();
+    @PutMapping("/{id}/password")
+    public ResponseEntity<User> changePassword(@PathVariable Long id,
+                                                @RequestParam String oldPassword,
+                                                @RequestParam String newPassword) {
+        User updated = service.changePassword(id, oldPassword, newPassword);
+        return ResponseEntity.ok(updated);
     }
-
 }

@@ -13,6 +13,9 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String phone_number;
+    private String nationality;
+    private String role;
 
     public Long getId(){
         return id;
@@ -46,6 +49,31 @@ public class User {
         return password;
     }
 
-    
+    public void setPhone_number(String phone_number){
+        this.phone_number = phone_number;   
+}
+
+    public String getPhone_number(){
+        return phone_number;
+    }
+
+    public void setNationality(String nationality){
+        this.nationality = nationality;
+    }
+
+    public String getNationality(){
+        return nationality;
+    }
+
+    public void setRole(String role) { 
+        this.role = role;
+    }
+
+    public String getRole() { 
+        return role; 
+    }
+
+
+
 }
 
