@@ -11,22 +11,22 @@ import java.util.List;
 @RequestMapping("/sites")
 public class TourpackageController {
 
-    private final TourpackageService service;
+    private final TourpackageService tourpackageservice;
 
-    public TourpackageController(TourpackageService service) {
-        this.service = service;
+    public TourpackageController(TourpackageService tourpackageservice) {
+        this.tourpackageservice = tourpackageservice;
     }
 
     // GET http://localhost:8080/sites
     @GetMapping
     public List<Tourpackage> getAllSites() {
-        return service.getAllSites();
+        return tourpackageservice.getAllSites();
     }
 
     // GET http://localhost:8080/sites/1
     @GetMapping("/{id}")
     public ResponseEntity<Tourpackage> getSiteById(@PathVariable Long id) {
-        Tourpackage site = service.getSiteById(id);
+        Tourpackage site = tourpackageservice.getSiteById(id);
         if (site == null) {
             return ResponseEntity.notFound().build();
         }
@@ -36,13 +36,7 @@ public class TourpackageController {
     // POST http://localhost:8080/sites
     @PostMapping
     public Tourpackage createSite(@RequestBody Tourpackage site) {
-        return service.createSite(site);
+        return tourpackageservice.createSite(site);
     }
 
-    // DELETE http://localhost:8080/sites/1
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSite(@PathVariable Long id) {
-        service.deleteSite(id);
-        return ResponseEntity.ok().build();
-    }
 }

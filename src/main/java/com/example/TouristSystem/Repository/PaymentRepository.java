@@ -2,9 +2,9 @@ package com.example.TouristSystem.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.example.TouristSystem.Models.User;
+import com.example.TouristSystem.Models.Payment;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
+    Payment findByBookingId(Long bookingId);
 }

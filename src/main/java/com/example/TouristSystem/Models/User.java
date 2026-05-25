@@ -15,6 +15,7 @@ public class User {
     private String password;
     private String phone_number;
     private String nationality;
+    private String role;
 
     public Long getId(){
         return id;
@@ -63,6 +64,16 @@ public class User {
     public String getNationality(){
         return nationality;
     }
+
+    public void setRole(String role) { 
+        this.role = role;
+    }
+
+    public String getRole() { 
+        return role; 
+    }
+
+
 
 }
 

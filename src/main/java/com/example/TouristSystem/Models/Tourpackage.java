@@ -3,7 +3,7 @@ package com.example.TouristSystem.Models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tourist_sites")
+@Table(name = "tour_packages")
 public class Tourpackage {
 
     @Id

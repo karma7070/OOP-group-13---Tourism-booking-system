@@ -18,12 +18,18 @@ public class Booking {
     @JoinColumn(name = "package_id")
     private Tourpackage tourPackage;
 
+    @ManyToOne
+    @JoinColumn(name = "accommodation_id")
+    private Accommodation accommodation;
+
     private String bookingDate;
     private String checkInDate;
     private String checkOutDate;
     private int numberOfGuests;
     private Double totalCost;
     private String status;
+
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -51,4 +57,7 @@ public class Booking {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public Accommodation getAccommodation() { return accommodation; }
+    public void setAccommodation(Accommodation accommodation) { this.accommodation = accommodation; }
 }
