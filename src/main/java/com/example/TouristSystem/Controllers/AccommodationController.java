@@ -6,6 +6,7 @@ import com.example.TouristSystem.Services.AccommodationService;
 import com.example.TouristSystem.Models.Accommodation;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/accommodations")
 public class AccommodationController {
@@ -32,6 +33,7 @@ public class AccommodationController {
         if (accommodation == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(accommodation);
     }
+
 
 }
     
