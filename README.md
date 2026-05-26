@@ -87,3 +87,11 @@ Each layer has a single responsibility and only communicates with the layer dire
 
 
 
+
+
+
+
+
+----------------------------------------------------------
+Sent what might be my final push, I tested a few API paths but just to be safe y'all can test the others too and check among the new pushed files for a TouristBookingSystem_Backend_Report.docx file and read it to understand how the backend works, thanks.
+-----------------------------------------------------------------
