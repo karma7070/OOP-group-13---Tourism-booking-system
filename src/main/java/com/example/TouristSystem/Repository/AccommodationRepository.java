@@ -9,4 +9,7 @@ import java.util.List;
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long> {
     // finds all accommodations where status = "AVAILABLE"
     List<Accommodation> findByStatus(String status);
+    List<Accommodation> findByLocationContainingIgnoreCase(String location);
+List<Accommodation> findByTypeContainingIgnoreCase(String type);
+List<Accommodation> findByStatusAndLocationContainingIgnoreCase(String status, String location);
 }
