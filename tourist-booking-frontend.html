@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roamly — Tourist Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --surface: #ffffff;
+    --border: #e8e0d5;
+    --text: #1a1612;
+    --muted: #9a8f82;
+    --accent: #d4603a;
+    --accent-dim: rgba(212,96,58,0.10);
+    --red: #c0392b;
+    --green: #2a9d8f;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(250,247,242,0.96);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+  }
+
+  .logo span { font-style: italic; color: var(--text); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+  }
+
+  .nav-tab {
+    padding: 8px 18px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; letter-spacing: 0.06em;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-tab.active {
+    background: var(--accent);
+    color: #0c0c0c;
+    font-weight: 500;
+  }
+
+  .nav-tab:hover:not(.active) { color: var(--text); }
+
+  .user-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px; letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .user-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 48px;
+  }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 300;
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .page-header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .page-header p {
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #333; }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; letter-spacing: 0.01em;
+    font-weight: 400;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* FORM ELEMENTS */
+  .form-group { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  input, select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus { border-color: var(--accent); }
+
+  select option { background: #f4efe8; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 22px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; letter-spacing: 0.06em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0c0c0c;
+    width: 100%;
+    padding: 12px;
+  }
+
+  .btn-primary:hover { background: #d4b87a; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-danger {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--red);
+  }
+
+  .btn-danger:hover { border-color: var(--red); background: rgba(224,90,90,0.08); }
+
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    font-size: 13px; letter-spacing: 0.06em;
+    color: var(--text);
+    max-width: 340px;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  #toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  #toast.success { border-left: 3px solid var(--green); }
+  #toast.error { border-left: 3px solid var(--red); }
+
+  /* RESULT PANEL */
+  .result-panel {
+    margin-top: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    color: #a0b0a0;
+    max-height: 240px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: none;
+  }
+
+  .result-panel.show { display: block; }
+
+  /* ITEMS LIST */
+  .items-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
+  .item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .item-row:hover { border-color: #333; }
+
+  .item-name {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 3px;
+  }
+
+  .item-meta {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--accent);
+    margin-right: 16px;
+  }
+
+  .item-actions { display: flex; gap: 8px; align-items: center; }
+
+  /* STATUS BADGE */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .badge-pending { background: rgba(200,169,110,0.15); color: var(--accent); }
+  .badge-confirmed { background: rgba(90,173,122,0.15); color: var(--green); }
+  .badge-cancelled { background: rgba(224,90,90,0.15); color: var(--red); }
+  .badge-available { background: rgba(90,173,122,0.15); color: var(--green); }
+  .badge-booked { background: rgba(224,90,90,0.15); color: var(--red); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  /* LOADING */
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e8e0d5;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TABS WITHIN PAGE */
+  .inner-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .inner-tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+
+  .inner-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .inner-tab:hover:not(.active) { color: var(--text); }
+
+  .inner-panel { display: none; }
+  .inner-panel.active { display: block; }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d0c4b5; border-radius: 2px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    main { padding: 24px 20px; }
+    .grid-2, .grid-3, .stats-row { grid-template-columns: 1fr; }
+    .nav-tabs { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Roam<span>ly</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('explore')">Explore</button>
+    <button class="nav-tab" onclick="showSection('bookings')">Bookings</button>
+    <button class="nav-tab" onclick="showSection('account')">Account</button>
+    <button class="nav-tab" onclick="showSection('admin')">Admin</button>
+  </div>
+  <div class="user-indicator">
+    <div class="user-dot"></div>
+    <span id="nav-user-name">Not signed in</span>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ========== EXPLORE ========== -->
+  <section class="section active" id="section-explore">
+    <div class="page-header">
+      <h1>Explore <em>destinations</em></h1>
+      <p>Browse available packages and accommodations</p>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="showInner('explore', 'packages')">Tour Packages</button>
+      <button class="inner-tab" onclick="showInner('explore', 'accommodations')">Accommodations</button>
+    </div>
+
+    <div class="inner-panel active" id="explore-packages">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:13px; color:var(--muted)">Available packages</span>
+        <button class="btn btn-outline btn-sm" onclick="loadPackages()">↻ Refresh</button>
+      </div>
+      <div class="items-list" id="packages-list">
+        <div class="empty"><div class="empty-icon">🗺</div>Click refresh to load packages</div>
+      </div>
+    </div>
+
+    <div class="inner-panel" id="explore-accommodations">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:13px; color:var(--muted)">Available accommodations</span>
+        <button class="btn btn-outline btn-sm" onclick="loadAccommodations()">↻ Refresh</button>
+      </div>
+      <div class="items-list" id="accommodations-list">
+        <div class="empty"><div class="empty-icon">🏨</div>Click refresh to load accommodations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BOOKINGS ========== -->
+  <section class="section" id="section-bookings">
+    <div class="page-header">
+      <h1>My <em>bookings</em></h1>
+      <p>Manage your reservations and payments</p>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="showInner('bookings', 'mybookings')">My Bookings</button>
+      <button class="inner-tab" onclick="showInner('bookings', 'book-package')">Book Package</button>
+      <button class="inner-tab" onclick="showInner('bookings', 'book-accommodation')">Book Accommodation</button>
+      <button class="inner-tab" onclick="showInner('bookings', 'payments')">Payments</button>
+    </div>
+
+    <div class="inner-panel active" id="bookings-mybookings">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:13px; color:var(--muted)">Your reservations</span>
+        <button class="btn btn-outline btn-sm" onclick="loadMyBookings()">↻ Refresh</button>
+      </div>
+      <div class="items-list" id="my-bookings-list">
+        <div class="empty"><div class="empty-icon">📋</div>Sign in and click refresh to see your bookings</div>
+      </div>
+    </div>
+
+    <div class="inner-panel" id="bookings-book-package">
+      <div class="card" style="max-width:480px;">
+        <div class="card-title"><span class="dot"></span>Book a Tour Package</div>
+        <div class="form-group">
+          <label>Package ID</label>
+          <input type="number" id="book-pkg-id" placeholder="e.g. 1">
+        </div>
+        <div class="form-group">
+          <label>Number of Guests</label>
+          <input type="number" id="book-pkg-guests" placeholder="e.g. 2" min="1">
+        </div>
+        <div class="form-group">
+          <label>Check In Date</label>
+          <input type="date" id="book-pkg-checkin">
+        </div>
+        <div class="form-group">
+          <label>Check Out Date</label>
+          <input type="date" id="book-pkg-checkout">
+        </div>
+        <button class="btn btn-primary" onclick="bookPackage()">Confirm Booking</button>
+        <div class="result-panel" id="book-pkg-result"></div>
+      </div>
+    </div>
+
+    <div class="inner-panel" id="bookings-book-accommodation">
+      <div class="card" style="max-width:480px;">
+        <div class="card-title"><span class="dot"></span>Book an Accommodation</div>
+        <div class="form-group">
+          <label>Accommodation ID</label>
+          <input type="number" id="book-acc-id" placeholder="e.g. 1">
+        </div>
+        <div class="form-group">
+          <label>Number of Guests</label>
+          <input type="number" id="book-acc-guests" placeholder="e.g. 2" min="1">
+        </div>
+        <div class="form-group">
+          <label>Check In Date</label>
+          <input type="date" id="book-acc-checkin">
+        </div>
+        <div class="form-group">
+          <label>Check Out Date</label>
+          <input type="date" id="book-acc-checkout">
+        </div>
+        <button class="btn btn-primary" onclick="bookAccommodation()">Confirm Booking</button>
+        <div class="result-panel" id="book-acc-result"></div>
+      </div>
+    </div>
+
+    <div class="inner-panel" id="bookings-payments">
+      <div class="card" style="max-width:480px;">
+        <div class="card-title"><span class="dot"></span>Make a Payment</div>
+        <div class="form-group">
+          <label>Booking ID</label>
+          <input type="number" id="pay-booking-id" placeholder="e.g. 1">
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="pay-method">
+            <option value="CreditCard">Credit Card</option>
+            <option value="DebitCard">Debit Card</option>
+            <option value="MobileMoney">Mobile Money</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="makePayment()">Make Payment</button>
+        <div class="result-panel" id="pay-result"></div>
+        <div class="divider"></div>
+        <div class="card-title"><span class="dot"></span>Process Payment</div>
+        <div class="form-group">
+          <label>Payment ID</label>
+          <input type="number" id="process-pay-id" placeholder="e.g. 1">
+        </div>
+        <button class="btn btn-outline" style="width:100%" onclick="processPayment()">Process Payment</button>
+        <div class="result-panel" id="process-pay-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ACCOUNT ========== -->
+  <section class="section" id="section-account">
+    <div class="page-header">
+      <h1>Your <em>account</em></h1>
+      <p>Register, update your profile and manage your details</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Register</div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="reg-name" placeholder="Arthur Ndeley">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="arthur@example.com">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" id="reg-phone" placeholder="+237 6XX XXX XXX">
+        </div>
+        <div class="form-group">
+          <label>Nationality</label>
+          <input type="text" id="reg-nationality" placeholder="Cameroonian">
+        </div>
+        <button class="btn btn-primary" onclick="register()">Create Account</button>
+        <div class="result-panel" id="reg-result"></div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-title"><span class="dot"></span>Update Profile</div>
+          <div class="form-group">
+            <label>User ID</label>
+            <input type="number" id="update-user-id" placeholder="e.g. 3">
+          </div>
+          <div class="form-group">
+            <label>New Name</label>
+            <input type="text" id="update-name" placeholder="New name">
+          </div>
+          <div class="form-group">
+            <label>New Email</label>
+            <input type="email" id="update-email" placeholder="newemail@example.com">
+          </div>
+          <button class="btn btn-primary" onclick="updateProfile()">Update Profile</button>
+          <div class="result-panel" id="update-result"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Change Password</div>
+          <div class="form-group">
+            <label>User ID</label>
+            <input type="number" id="pwd-user-id" placeholder="e.g. 3">
+          </div>
+          <div class="form-group">
+            <label>Old Password</label>
+            <input type="password" id="pwd-old" placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="pwd-new" placeholder="••••••••">
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
+          <div class="result-panel" id="pwd-result"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ADMIN ========== -->
+  <section class="section" id="section-admin">
+    <div class="page-header">
+      <h1>Admin <em>panel</em></h1>
+      <p>Manage packages, accommodations, users and bookings</p>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="showInner('admin', 'admin-packages')">Packages</button>
+      <button class="inner-tab" onclick="showInner('admin', 'admin-accommodations')">Accommodations</button>
+      <button class="inner-tab" onclick="showInner('admin', 'admin-users')">Users</button>
+      <button class="inner-tab" onclick="showInner('admin', 'admin-bookings')">Bookings</button>
+    </div>
+
+    <!-- ADMIN PACKAGES -->
+    <div class="inner-panel active" id="admin-admin-packages">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Add Tour Package</div>
+          <div class="form-group"><label>Name</label><input type="text" id="pkg-name" placeholder="Mount Cameroon Trek"></div>
+          <div class="form-group"><label>Location</label><input type="text" id="pkg-location" placeholder="Buea"></div>
+          <div class="form-group"><label>Description</label><input type="text" id="pkg-desc" placeholder="Description"></div>
+          <div class="form-group"><label>Price Per Person (XAF)</label><input type="number" id="pkg-price" placeholder="50000"></div>
+          <div class="form-group"><label>Activities</label><input type="text" id="pkg-activities" placeholder="Hiking, Camping"></div>
+          <div class="form-group"><label>Open Slots</label><input type="number" id="pkg-slots" placeholder="20"></div>
+          <div class="form-group"><label>Duration (days)</label><input type="number" id="pkg-duration" placeholder="3"></div>
+          <button class="btn btn-primary" onclick="addPackage()">Add Package</button>
+          <div class="result-panel" id="pkg-result"></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <span style="font-size:13px; color:var(--muted)">All packages</span>
+            <button class="btn btn-outline btn-sm" onclick="loadAdminPackages()">↻ Load</button>
+          </div>
+          <div class="items-list" id="admin-packages-list">
+            <div class="empty"><div class="empty-icon">📦</div>Click load to see packages</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN ACCOMMODATIONS -->
+    <div class="inner-panel" id="admin-admin-accommodations">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Add Accommodation</div>
+          <div class="form-group"><label>Name</label><input type="text" id="acc-name" placeholder="Buea Hotel"></div>
+          <div class="form-group"><label>Type</label><input type="text" id="acc-type" placeholder="Hotel"></div>
+          <div class="form-group"><label>Location</label><input type="text" id="acc-location" placeholder="Buea"></div>
+          <div class="form-group"><label>Amenities</label><input type="text" id="acc-amenities" placeholder="WiFi, Pool, Breakfast"></div>
+          <div class="form-group"><label>Price Per Night (XAF)</label><input type="number" id="acc-price" placeholder="75000"></div>
+          <button class="btn btn-primary" onclick="addAccommodation()">Add Accommodation</button>
+          <div class="result-panel" id="acc-result"></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <span style="font-size:13px; color:var(--muted)">All accommodations</span>
+            <button class="btn btn-outline btn-sm" onclick="loadAdminAccommodations()">↻ Load</button>
+          </div>
+          <div class="items-list" id="admin-accommodations-list">
+            <div class="empty"><div class="empty-icon">🏨</div>Click load to see accommodations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN USERS -->
+    <div class="inner-panel" id="admin-admin-users">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:13px; color:var(--muted)">All registered users</span>
+        <button class="btn btn-outline btn-sm" onclick="loadAdminUsers()">↻ Load</button>
+      </div>
+      <div class="items-list" id="admin-users-list">
+        <div class="empty"><div class="empty-icon">👥</div>Click load to see users</div>
+      </div>
+    </div>
+
+    <!-- ADMIN BOOKINGS -->
+    <div class="inner-panel" id="admin-admin-bookings">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:13px; color:var(--muted)">All bookings</span>
+        <button class="btn btn-outline btn-sm" onclick="loadAdminBookings()">↻ Load</button>
+      </div>
+      <div class="items-list" id="admin-bookings-list">
+        <div class="empty"><div class="empty-icon">📋</div>Click load to see all bookings</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// CONFIG — change this to your backend URL
+// ============================================================
+const API = 'http://localhost:8080';
+
+// ============================================================
+// STATE
+// ============================================================
+let currentUserId = null;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showInner(section, panel) {
+  const prefix = section + '-';
+  document.querySelectorAll(`#section-${section} .inner-panel`).forEach(p => p.classList.remove('active'));
+  document.querySelectorAll(`#section-${section} .inner-tab`).forEach(t => t.classList.remove('active'));
+  document.getElementById(prefix + panel).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  setTimeout(() => el.className = '', 3500);
+}
+
+// ============================================================
+// RESULT PANEL
+// ============================================================
+function showResult(id, data) {
+  const el = document.getElementById(id);
+  el.textContent = JSON.stringify(data, null, 2);
+  el.classList.add('show');
+}
+
+// ============================================================
+// API HELPER
+// ============================================================
+async function api(method, path, body = null, params = null) {
+  let url = API + path;
+  if (params) {
+    const qs = new URLSearchParams(params).toString();
+    url += '?' + qs;
+  }
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  const text = await res.text();
+  try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+  catch { return { ok: res.ok, status: res.status, data: text }; }
+}
+
+// ============================================================
+// ACCOUNT
+// ============================================================
+async function register() {
+  const body = {
+    name: document.getElementById('reg-name').value,
+    email: document.getElementById('reg-email').value,
+    password: document.getElementById('reg-password').value,
+    phone_number: document.getElementById('reg-phone').value,
+    nationality: document.getElementById('reg-nationality').value,
+    role: 'USER'
+  };
+  const r = await api('POST', '/users/register', body);
+  showResult('reg-result', r.data);
+  if (r.ok) {
+    currentUserId = r.data.id;
+    document.getElementById('nav-user-name').textContent = r.data.name;
+    toast('Account created! Your ID is ' + r.data.id);
+  } else {
+    toast(r.data.message || 'Registration failed', 'error');
+  }
+}
+
+async function updateProfile() {
+  const id = document.getElementById('update-user-id').value;
+  const body = {
+    name: document.getElementById('update-name').value,
+    email: document.getElementById('update-email').value,
+  };
+  const r = await api('PUT', `/users/${id}/profile`, body);
+  showResult('update-result', r.data);
+  if (r.ok) toast('Profile updated');
+  else toast('Update failed', 'error');
+}
+
+async function changePassword() {
+  const id = document.getElementById('pwd-user-id').value;
+  const params = {
+    oldPassword: document.getElementById('pwd-old').value,
+    newPassword: document.getElementById('pwd-new').value,
+  };
+  const r = await api('PUT', `/users/${id}/password`, null, params);
+  showResult('pwd-result', r.data);
+  if (r.ok) toast('Password changed');
+  else toast('Password change failed', 'error');
+}
+
+// ============================================================
+// EXPLORE
+// ============================================================
+async function loadPackages() {
+  const r = await api('GET', '/admin/packages');
+  const list = document.getElementById('packages-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🗺</div>No packages available</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(p => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">${p.name}</div>
+        <div class="item-meta">${p.location} · ${p.duration} days · ${p.open_slots} slots · ID: ${p.id}</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(p.pricePerPerson).toLocaleString()}</span>
+        <button class="btn btn-outline btn-sm" onclick="prefillPackage(${p.id})">Book</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function prefillPackage(id) {
+  document.getElementById('book-pkg-id').value = id;
+  showSection('bookings');
+  showInner('bookings', 'book-package');
+  document.querySelectorAll('#section-bookings .inner-tab')[1].classList.add('active');
+  document.querySelectorAll('#section-bookings .inner-tab')[0].classList.remove('active');
+}
+
+async function loadAccommodations() {
+  const r = await api('GET', '/accommodations/available');
+  const list = document.getElementById('accommodations-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🏨</div>No accommodations available</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(a => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">${a.name}</div>
+        <div class="item-meta">${a.type} · ${a.location} · ${a.amenities} · ID: ${a.id}</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(a.price).toLocaleString()}</span>
+        <span class="badge badge-${a.status.toLowerCase()}">${a.status}</span>
+        <button class="btn btn-outline btn-sm" onclick="prefillAccommodation(${a.id})">Book</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function prefillAccommodation(id) {
+  document.getElementById('book-acc-id').value = id;
+  showSection('bookings');
+}
+
+// ============================================================
+// BOOKINGS
+// ============================================================
+async function bookPackage() {
+  const userId = currentUserId || prompt('Enter your User ID:');
+  if (!userId) return;
+  const pkgId = document.getElementById('book-pkg-id').value;
+  const params = {
+    numberOfGuests: document.getElementById('book-pkg-guests').value,
+    checkInDate: document.getElementById('book-pkg-checkin').value,
+    checkOutDate: document.getElementById('book-pkg-checkout').value,
+  };
+  const r = await api('POST', `/bookings/${userId}/${pkgId}`, null, params);
+  showResult('book-pkg-result', r.data);
+  if (r.ok) toast(`Booking confirmed! Total: XAF ${Number(r.data.totalCost).toLocaleString()}`);
+  else toast(r.data.message || 'Booking failed', 'error');
+}
+
+async function bookAccommodation() {
+  const userId = currentUserId || prompt('Enter your User ID:');
+  if (!userId) return;
+  const accId = document.getElementById('book-acc-id').value;
+  const params = {
+    numberOfGuests: document.getElementById('book-acc-guests').value,
+    checkInDate: document.getElementById('book-acc-checkin').value,
+    checkOutDate: document.getElementById('book-acc-checkout').value,
+  };
+  const r = await api('POST', `/bookings/accommodation/${userId}/${accId}`, null, params);
+  showResult('book-acc-result', r.data);
+  if (r.ok) toast(`Accommodation booked! Total: XAF ${Number(r.data.totalCost).toLocaleString()}`);
+  else toast(r.data.message || 'Booking failed', 'error');
+}
+
+async function loadMyBookings() {
+  const userId = currentUserId || prompt('Enter your User ID:');
+  if (!userId) return;
+  const r = await api('GET', `/bookings/user/${userId}`);
+  const list = document.getElementById('my-bookings-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>No bookings found</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(b => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">Booking #${b.id}</div>
+        <div class="item-meta">Check in: ${b.checkInDate || '—'} · Guests: ${b.numberOfGuests}</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(b.totalCost).toLocaleString()}</span>
+        <span class="badge badge-${(b.status||'').toLowerCase()}">${b.status}</span>
+        <button class="btn btn-danger btn-sm" onclick="cancelBooking(${b.id}, ${userId})">Cancel</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function cancelBooking(bookingId, userId) {
+  if (!confirm('Cancel this booking?')) return;
+  const r = await api('PUT', `/bookings/${bookingId}/cancel/${userId}`);
+  if (r.ok) { toast('Booking cancelled'); loadMyBookings(); }
+  else toast('Cancel failed', 'error');
+}
+
+// ============================================================
+// PAYMENTS
+// ============================================================
+async function makePayment() {
+  const bookingId = document.getElementById('pay-booking-id').value;
+  const method = document.getElementById('pay-method').value;
+  const r = await api('POST', `/payments/make/${bookingId}`, null, { method });
+  showResult('pay-result', r.data);
+  if (r.ok) toast('Payment created! Payment ID: ' + r.data.id);
+  else toast('Payment failed', 'error');
+}
+
+async function processPayment() {
+  const payId = document.getElementById('process-pay-id').value;
+  const r = await api('PUT', `/payments/${payId}/process`);
+  showResult('process-pay-result', r.data);
+  if (r.ok) toast('Payment processed successfully');
+  else toast('Processing failed', 'error');
+}
+
+// ============================================================
+// ADMIN
+// ============================================================
+async function addPackage() {
+  const body = {
+    name: document.getElementById('pkg-name').value,
+    location: document.getElementById('pkg-location').value,
+    description: document.getElementById('pkg-desc').value,
+    pricePerPerson: parseFloat(document.getElementById('pkg-price').value),
+    activities: document.getElementById('pkg-activities').value,
+    open_slots: parseInt(document.getElementById('pkg-slots').value),
+    duration: parseInt(document.getElementById('pkg-duration').value),
+  };
+  const r = await api('POST', '/admin/packages', body);
+  showResult('pkg-result', r.data);
+  if (r.ok) { toast('Package added'); loadAdminPackages(); }
+  else toast('Failed to add package', 'error');
+}
+
+async function loadAdminPackages() {
+  const r = await api('GET', '/admin/packages');
+  const list = document.getElementById('admin-packages-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📦</div>No packages yet</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(p => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">${p.name} <span style="color:var(--muted);font-size:12px">ID: ${p.id}</span></div>
+        <div class="item-meta">${p.location} · ${p.duration} days · ${p.open_slots} slots</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(p.pricePerPerson).toLocaleString()}</span>
+        <button class="btn btn-danger btn-sm" onclick="deletePackage(${p.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function deletePackage(id) {
+  if (!confirm('Delete this package?')) return;
+  const r = await api('DELETE', `/admin/packages/${id}`);
+  if (r.ok) { toast('Package deleted'); loadAdminPackages(); }
+  else toast('Delete failed', 'error');
+}
+
+async function addAccommodation() {
+  const body = {
+    name: document.getElementById('acc-name').value,
+    type: document.getElementById('acc-type').value,
+    location: document.getElementById('acc-location').value,
+    amenities: document.getElementById('acc-amenities').value,
+    price: parseFloat(document.getElementById('acc-price').value),
+    status: 'AVAILABLE',
+  };
+  const r = await api('POST', '/admin/accommodations', body);
+  showResult('acc-result', r.data);
+  if (r.ok) { toast('Accommodation added'); loadAdminAccommodations(); }
+  else toast('Failed to add accommodation', 'error');
+}
+
+async function loadAdminAccommodations() {
+  const r = await api('GET', '/admin/accommodations');
+  const list = document.getElementById('admin-accommodations-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🏨</div>No accommodations yet</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(a => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">${a.name} <span style="color:var(--muted);font-size:12px">ID: ${a.id}</span></div>
+        <div class="item-meta">${a.type} · ${a.location}</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(a.price).toLocaleString()}</span>
+        <span class="badge badge-${(a.status||'').toLowerCase()}">${a.status}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteAccommodation(${a.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function deleteAccommodation(id) {
+  if (!confirm('Delete this accommodation?')) return;
+  const r = await api('DELETE', `/admin/accommodations/${id}`);
+  if (r.ok) { toast('Accommodation deleted'); loadAdminAccommodations(); }
+  else toast('Delete failed', 'error');
+}
+
+async function loadAdminUsers() {
+  const r = await api('GET', '/admin/users');
+  const list = document.getElementById('admin-users-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">👥</div>No users yet</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(u => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">${u.name} <span style="color:var(--muted);font-size:12px">ID: ${u.id}</span></div>
+        <div class="item-meta">${u.email} · ${u.nationality || '—'} · Role: ${u.role || 'USER'}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteUser(${u.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function deleteUser(id) {
+  if (!confirm('Delete this user?')) return;
+  const r = await api('DELETE', `/admin/users/${id}`);
+  if (r.ok) { toast('User deleted'); loadAdminUsers(); }
+  else toast('Delete failed', 'error');
+}
+
+async function loadAdminBookings() {
+  const r = await api('GET', '/bookings');
+  const list = document.getElementById('admin-bookings-list');
+  if (!r.ok || !r.data.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>No bookings yet</div>';
+    return;
+  }
+  list.innerHTML = r.data.map(b => `
+    <div class="item-row">
+      <div>
+        <div class="item-name">Booking #${b.id} — ${b.user ? b.user.name : 'Unknown'}</div>
+        <div class="item-meta">Guests: ${b.numberOfGuests} · Check in: ${b.checkInDate || '—'}</div>
+      </div>
+      <div class="item-actions">
+        <span class="item-price">XAF ${Number(b.totalCost).toLocaleString()}</span>
+        <span class="badge badge-${(b.status||'').toLowerCase()}">${b.status}</span>
+        <button class="btn btn-outline btn-sm" onclick="confirmBooking(${b.id})">Confirm</button>
+        <button class="btn btn-danger btn-sm" onclick="adminDeleteBooking(${b.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function confirmBooking(id) {
+  const r = await api('PUT', `/bookings/${id}/confirm`);
+  if (r.ok) { toast('Booking confirmed'); loadAdminBookings(); }
+  else toast('Confirm failed', 'error');
+}
+
+async function adminDeleteBooking(id) {
+  if (!confirm('Delete this booking?')) return;
+  const r = await api('DELETE', `/bookings/${id}`);
+  if (r.ok) { toast('Booking deleted'); loadAdminBookings(); }
+  else toast('Delete failed', 'error');
+}
+</script>
+</body>
+</html>
